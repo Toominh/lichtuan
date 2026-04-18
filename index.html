@@ -1,0 +1,202 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Lịch Vạn Niên - Chuẩn Xác (1950 - 2080)</title>
+    <style>
+        :root { --primary: #c62828; --secondary: #1565c0; --bg: #f5f6fa; --success: #2e7d32; }
+        body { font-family: 'Segoe UI', Tahoma, sans-serif; background: var(--bg); display: flex; flex-direction: column; align-items: center; padding: 10px; margin: 0; }
+        .calendar-box { background: #fff; width: 100%; max-width: 450px; border-radius: 15px; box-shadow: 0 10px 40px rgba(0,0,0,0.1); overflow: hidden; }
+        .header { background: var(--primary); color: white; padding: 15px; text-align: center; }
+        .controls { display: flex; flex-wrap: wrap; justify-content: center; gap: 8px; padding: 15px; background: #fff; border-bottom: 1px solid #eee; }
+        select, input, button { padding: 8px; border-radius: 6px; border: 1px solid #ddd; font-size: 0.9rem; outline: none; }
+        button { cursor: pointer; background: #fff; }
+        .btn-today { background: var(--secondary); color: white; border: none; flex: 1; }
+        .btn-leap { background: var(--success); color: white; border: none; flex: 1; }
+        .weekdays { display: grid; grid-template-columns: repeat(7, 1fr); background: #f8f9fa; text-align: center; font-weight: bold; font-size: 0.75rem; padding: 10px 0; color: #666; }
+        .days-grid { display: grid; grid-template-columns: repeat(7, 1fr); }
+        .cell { aspect-ratio: 1/1; border-right: 1px solid #f0f0f0; border-bottom: 1px solid #f0f0f0; display: flex; flex-direction: column; align-items: center; justify-content: center; cursor: pointer; position: relative; }
+        .cell:hover { background: #fffcf0; }
+        .solar { font-size: 1.1rem; font-weight: 600; }
+        .lunar { font-size: 0.7rem; color: #888; margin-top: 2px; }
+        .sun { color: var(--primary); }
+        .sat { color: var(--secondary); }
+        .today { background: #fff5f5; outline: 2px solid var(--primary); z-index: 1; }
+        .special-lunar { color: var(--primary); font-weight: bold; }
+        .empty { background: #fafafa; }
+        .leap-list { display: none; width: 100%; max-width: 450px; background: white; border-radius: 12px; padding: 15px; box-shadow: 0 4px 20px rgba(0,0,0,0.15); margin-top: 15px; box-sizing: border-box; }
+        .leap-scroll { max-height: 250px; overflow-y: auto; border: 1px solid #eee; border-radius: 8px; }
+        table { width: 100%; border-collapse: collapse; }
+        th, td { padding: 8px 12px; border-bottom: 1px solid #eee; text-align: left; font-size: 0.9rem; }
+        th { position: sticky; top: 0; background: #f8f9fa; box-shadow: 0 1px 0 #ddd; }
+    </style>
+</head>
+<body>
+
+<div class="calendar-box">
+    <div class="header"><h2 id="monthTitle" style="margin:0; font-size: 1.2rem;">THÁNG -- / ----</h2></div>
+    <div class="controls">
+        <button onclick="changeMonth(-1)">❮</button>
+        <select id="selMonth" onchange="jump()"></select>
+        <input type="number" id="inpYear" style="width: 70px" onchange="jump()">
+        <button onclick="changeMonth(1)">❯</button>
+        <div style="display: flex; width: 100%; gap: 8px; margin-top:5px;">
+            <button class="btn-today" onclick="goToday()">Hôm nay</button>
+            <button class="btn-leap" onclick="toggleLeapList()">Xem năm nhuận</button>
+        </div>
+    </div>
+    <div class="weekdays">
+        <div>T2</div><div>T3</div><div>T4</div><div>T5</div><div>T6</div><div class="sat">T7</div><div class="sun">CN</div>
+    </div>
+    <div id="grid" class="days-grid"></div>
+</div>
+
+<div id="leapSection" class="leap-list">
+    <h3 style="margin:0 0 10px 0; color: var(--success); font-size: 1rem;">Danh sách năm nhuận (1950 - 2080)</h3>
+    <div class="leap-scroll">
+        <table id="leapTable"><thead><tr><th>Năm Âm Lịch</th><th>Tháng nhuận</th></tr></thead><tbody></tbody></table>
+    </div>
+</div>
+
+<script>
+const LEAP_DATA = {
+    1950:3, 1952:8, 1955:3, 1957:8, 1960:6, 1963:4, 1966:3, 1968:7, 1971:5, 1974:4, 1976:8, 1979:6, 1982:4, 1984:10, 1987:6,
+    1990:5, 1993:3, 1995:8, 1998:5, 2001:4, 2004:2, 2006:7, 2009:5, 2012:4, 2014:9, 2017:6, 2020:4, 2023:2, 2025:6, 2028:5, 2031:3, 2033:11, 2036:6, 2039:5, 2042:2, 2044:9, 2047:5,
+    2050:3, 2052:8, 2055:6, 2058:4, 2061:3, 2063:7, 2066:5, 2069:4, 2072:2, 2074:6, 2077:5, 2080:3
+};
+
+function getNewMoon(k) {
+    let T = k / 1236.85;
+    let T2 = T * T;
+    let JDN = 2451550.09766 + 29.530588861 * k + 0.0001337 * T2;
+    let dr = Math.PI / 180;
+    let M = (2.5534 + 29.10535670 * k) * dr;
+    let Mpr = (201.5643 + 385.81693528 * k) * dr;
+    let F = (160.7108 + 390.67050284 * k) * dr;
+    let E = 1 - 0.002516 * T - 0.0000074 * T2;
+    let delta = -0.40720 * Math.sin(Mpr)
+              + 0.17241 * E * Math.sin(M)
+              + 0.01608 * Math.sin(2 * Mpr)
+              + 0.01039 * Math.sin(2 * F)
+              - 0.00739 * E * Math.sin(Mpr - M)
+              - 0.00514 * E * Math.sin(Mpr + M)
+              + 0.00208 * E * E * Math.sin(2 * M)
+              - 0.00111 * Math.sin(Mpr - 2 * F)
+              - 0.00057 * Math.sin(Mpr + 2 * F)
+              + 0.00056 * E * Math.sin(2 * Mpr + M)
+              - 0.00042 * Math.sin(3 * Mpr);
+    return JDN + delta + 7/24; 
+}
+
+function getJD(d, m, y) {
+    if (m <= 2) { y -= 1; m += 12; }
+    let a = Math.floor(y / 100);
+    let b = 2 - a + Math.floor(a / 4);
+    return Math.floor(365.25 * (y + 4716)) + Math.floor(30.6001 * (m + 1)) + d + b - 1524.5;
+}
+
+function getLunarDate(d, m, y) {
+    const jd = Math.floor(getJD(d, m, y) + 0.5);
+    let k = Math.floor((y + (m - 1) / 12 - 2000) * 12.3685);
+    let nm = Math.floor(getNewMoon(k) + 0.5);
+    while (nm > jd) { k--; nm = Math.floor(getNewMoon(k) + 0.5); }
+    let next_nm = Math.floor(getNewMoon(k + 1) + 0.5);
+    while (jd >= next_nm) { k++; nm = next_nm; next_nm = Math.floor(getNewMoon(k + 1) + 0.5); }
+    let day = Math.round(jd - nm + 1);
+    
+    let currentK = 298; let lYear = 2024; let lMonth = 1; let isLeap = false;
+    
+    if (k > currentK) {
+        while (currentK < k) {
+            currentK++;
+            if (isLeap) { lMonth++; isLeap = false; if (lMonth > 12) { lMonth = 1; lYear++; } } 
+            else {
+                let leapMonth = LEAP_DATA[lYear];
+                if (leapMonth && lMonth === leapMonth) { isLeap = true; } 
+                else { lMonth++; if (lMonth > 12) { lMonth = 1; lYear++; } }
+            }
+        }
+    } else if (k < currentK) {
+        while (currentK > k) {
+            currentK--;
+            if (isLeap) { isLeap = false; } 
+            else {
+                lMonth--; if (lMonth < 1) { lYear--; lMonth = 12; }
+                let leapMonth = LEAP_DATA[lYear];
+                if (leapMonth && lMonth === leapMonth) { isLeap = true; }
+            }
+        }
+    }
+    return { ld: day, lm: lMonth, isLeap: isLeap };
+}
+
+let viewDate = new Date();
+
+function render() {
+    const grid = document.getElementById('grid');
+    const y = viewDate.getFullYear(), m = viewDate.getMonth();
+    document.getElementById('monthTitle').innerText = `THÁNG ${String(m+1).padStart(2,'0')} / ${y}`;
+    document.getElementById('selMonth').value = m;
+    document.getElementById('inpYear').value = y;
+    grid.innerHTML = '';
+
+    let firstDay = new Date(y, m, 1).getDay();
+    let offset = (firstDay === 0) ? 6 : firstDay - 1; 
+
+    const totalDays = new Date(y, m + 1, 0).getDate();
+
+    for (let i = 0; i < offset; i++) {
+        const div = document.createElement('div'); div.className = 'cell empty'; grid.appendChild(div);
+    }
+
+    for (let d = 1; d <= totalDays; d++) {
+        const cell = document.createElement('div'); cell.className = 'cell';
+        const dateObj = new Date(y, m, d);
+        const dow = dateObj.getDay();
+        const today = new Date();
+        if (d === today.getDate() && m === today.getMonth() && y === today.getFullYear()) cell.classList.add('today');
+
+        const lun = getLunarDate(d, m + 1, y);
+        let txt = lun.ld;
+        if (lun.ld === 1) txt = `1/${lun.lm}${lun.isLeap ? 'n' : ''}`;
+
+        cell.innerHTML = `<div class="solar ${dow == 0 ? 'sun' : (dow == 6 ? 'sat' : '')}">${d}</div>
+                          <div class="lunar ${lun.ld == 1 || lun.ld == 15 ? 'special-lunar' : ''}">${txt}</div>`;
+        grid.appendChild(cell);
+    }
+}
+
+function toggleLeapList() {
+    const sec = document.getElementById('leapSection');
+    const tbody = document.querySelector('#leapTable tbody');
+    if (sec.style.display === 'block') { sec.style.display = 'none'; return; }
+    tbody.innerHTML = '';
+    const curY = parseInt(document.getElementById('inpYear').value);
+    const years = Object.keys(LEAP_DATA).map(Number).sort((a,b)=>a-b);
+    let activeRow = null;
+    years.forEach(yr => {
+        const tr = document.createElement('tr');
+        tr.innerHTML = `<td>Năm ${yr}</td><td>Tháng ${LEAP_DATA[yr]}</td>`;
+        if(yr === curY) { tr.style.background = "#fff9c4"; activeRow = tr; }
+        tbody.appendChild(tr);
+    });
+    sec.style.display = 'block';
+    sec.scrollIntoView({ behavior: 'smooth' });
+    if (activeRow) { setTimeout(() => activeRow.scrollIntoView({ block: 'center' }), 100); }
+}
+
+function init() {
+    const sel = document.getElementById('selMonth');
+    for(let i=0; i<12; i++) {
+        const opt = document.createElement('option'); opt.value = i; opt.innerText = "Tháng "+(i+1); sel.appendChild(opt);
+    }
+    render();
+}
+function changeMonth(n) { viewDate.setMonth(viewDate.getMonth()+n); render(); }
+function jump() { viewDate = new Date(document.getElementById('inpYear').value, document.getElementById('selMonth').value, 1); render(); }
+function goToday() { viewDate = new Date(); render(); }
+init();
+</script>
+</body>
+</html>
