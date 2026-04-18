@@ -2,50 +2,81 @@
 <html lang="vi">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Lịch Vạn Niên - Chuẩn Xác (1950 - 2080)</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>Lịch Vạn Niên - Tối Ưu iPhone</title>
     <style>
         :root { --primary: #c62828; --secondary: #1565c0; --bg: #f5f6fa; --success: #2e7d32; }
-        body { font-family: 'Segoe UI', Tahoma, sans-serif; background: var(--bg); display: flex; flex-direction: column; align-items: center; padding: 10px; margin: 0; }
-        .calendar-box { background: #fff; width: 100%; max-width: 450px; border-radius: 15px; box-shadow: 0 10px 40px rgba(0,0,0,0.1); overflow: hidden; }
-        .header { background: var(--primary); color: white; padding: 15px; text-align: center; }
-        .controls { display: flex; flex-wrap: wrap; justify-content: center; gap: 8px; padding: 15px; background: #fff; border-bottom: 1px solid #eee; }
-        select, input, button { padding: 8px; border-radius: 6px; border: 1px solid #ddd; font-size: 0.9rem; outline: none; }
-        button { cursor: pointer; background: #fff; }
-        .btn-today { background: var(--secondary); color: white; border: none; flex: 1; }
-        .btn-leap { background: var(--success); color: white; border: none; flex: 1; }
-        .weekdays { display: grid; grid-template-columns: repeat(7, 1fr); background: #f8f9fa; text-align: center; font-weight: bold; font-size: 0.75rem; padding: 10px 0; color: #666; }
+        * { box-sizing: border-box; -webkit-tap-highlight-color: transparent; }
+        body { font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif; background: var(--bg); display: flex; flex-direction: column; align-items: center; padding: 10px; margin: 0; }
+        
+        /* Khung lịch */
+        .calendar-box { background: #fff; width: 100%; max-width: 450px; border-radius: 20px; box-shadow: 0 10px 40px rgba(0,0,0,0.1); overflow: hidden; }
+        .header { background: var(--primary); color: white; padding: 18px; text-align: center; }
+        .header h2 { margin: 0; font-size: 1.3rem; letter-spacing: 1px; }
+
+        /* Khu vực điều khiển - Tối ưu cho cảm ứng */
+        .controls { padding: 15px; background: #fff; border-bottom: 1px solid #eee; display: flex; flex-direction: column; gap: 12px; }
+        .control-row { display: flex; align-items: center; justify-content: center; gap: 10px; }
+        
+        select, input { padding: 10px; border-radius: 8px; border: 1px solid #ddd; font-size: 1rem; text-align: center; background: #f9f9f9; }
+        input[type="number"] { width: 80px; font-weight: bold; color: var(--primary); }
+        
+        button { 
+            padding: 10px 15px; border-radius: 8px; border: 1px solid #ddd; 
+            background: #fff; cursor: pointer; font-weight: bold; font-size: 1.1rem;
+            min-width: 45px; transition: background 0.2s;
+        }
+        button:active { background: #eee; }
+        .btn-nav { color: var(--primary); border-color: var(--primary); }
+        
+        .action-group { display: flex; width: 100%; gap: 10px; }
+        .btn-today { background: var(--secondary); color: white; border: none; flex: 1; font-size: 0.9rem; }
+        .btn-leap { background: var(--success); color: white; border: none; flex: 1; font-size: 0.9rem; }
+
+        /* Lưới lịch */
+        .weekdays { display: grid; grid-template-columns: repeat(7, 1fr); background: #f8f9fa; text-align: center; font-weight: bold; font-size: 0.8rem; padding: 12px 0; color: #666; }
         .days-grid { display: grid; grid-template-columns: repeat(7, 1fr); }
-        .cell { aspect-ratio: 1/1; border-right: 1px solid #f0f0f0; border-bottom: 1px solid #f0f0f0; display: flex; flex-direction: column; align-items: center; justify-content: center; cursor: pointer; position: relative; }
-        .cell:hover { background: #fffcf0; }
-        .solar { font-size: 1.1rem; font-weight: 600; }
-        .lunar { font-size: 0.7rem; color: #888; margin-top: 2px; }
+        .cell { aspect-ratio: 1/1; border-right: 1px solid #f0f0f0; border-bottom: 1px solid #f0f0f0; display: flex; flex-direction: column; align-items: center; justify-content: center; cursor: pointer; }
+        .solar { font-size: 1.2rem; font-weight: 600; }
+        .lunar { font-size: 0.75rem; color: #888; margin-top: 3px; }
         .sun { color: var(--primary); }
         .sat { color: var(--secondary); }
-        .today { background: #fff5f5; outline: 2px solid var(--primary); z-index: 1; }
+        .today { background: #fff5f5; outline: 2px solid var(--primary); z-index: 1; border-radius: 4px; }
         .special-lunar { color: var(--primary); font-weight: bold; }
         .empty { background: #fafafa; }
-        .leap-list { display: none; width: 100%; max-width: 450px; background: white; border-radius: 12px; padding: 15px; box-shadow: 0 4px 20px rgba(0,0,0,0.15); margin-top: 15px; box-sizing: border-box; }
-        .leap-scroll { max-height: 250px; overflow-y: auto; border: 1px solid #eee; border-radius: 8px; }
+
+        /* Danh sách năm nhuận */
+        .leap-list { display: none; width: 100%; max-width: 450px; background: white; border-radius: 15px; padding: 15px; box-shadow: 0 4px 20px rgba(0,0,0,0.15); margin-top: 15px; }
+        .leap-scroll { max-height: 250px; overflow-y: auto; border: 1px solid #eee; border-radius: 10px; }
         table { width: 100%; border-collapse: collapse; }
-        th, td { padding: 8px 12px; border-bottom: 1px solid #eee; text-align: left; font-size: 0.9rem; }
-        th { position: sticky; top: 0; background: #f8f9fa; box-shadow: 0 1px 0 #ddd; }
+        th, td { padding: 12px; border-bottom: 1px solid #eee; text-align: left; font-size: 1rem; }
+        th { position: sticky; top: 0; background: #f8f9fa; }
     </style>
 </head>
 <body>
 
 <div class="calendar-box">
-    <div class="header"><h2 id="monthTitle" style="margin:0; font-size: 1.2rem;">THÁNG -- / ----</h2></div>
+    <div class="header"><h2 id="monthTitle">THÁNG -- / ----</h2></div>
+    
     <div class="controls">
-        <button onclick="changeMonth(-1)">❮</button>
-        <select id="selMonth" onchange="jump()"></select>
-        <input type="number" id="inpYear" style="width: 70px" onchange="jump()">
-        <button onclick="changeMonth(1)">❯</button>
-        <div style="display: flex; width: 100%; gap: 8px; margin-top:5px;">
+        <div class="control-row">
+            <button class="btn-nav" onclick="changeMonth(-1)">❮</button>
+            <select id="selMonth" onchange="jump()" style="flex: 1;"></select>
+            <button class="btn-nav" onclick="changeMonth(1)">❯</button>
+        </div>
+        
+        <div class="control-row">
+            <button class="btn-nav" onclick="changeYear(-1)">-1</button>
+            <input type="number" id="inpYear" onchange="jump()">
+            <button class="btn-nav" onclick="changeYear(1)">+1</button>
+        </div>
+
+        <div class="action-group">
             <button class="btn-today" onclick="goToday()">Hôm nay</button>
             <button class="btn-leap" onclick="toggleLeapList()">Xem năm nhuận</button>
         </div>
     </div>
+
     <div class="weekdays">
         <div>T2</div><div>T3</div><div>T4</div><div>T5</div><div>T6</div><div class="sat">T7</div><div class="sun">CN</div>
     </div>
@@ -53,9 +84,9 @@
 </div>
 
 <div id="leapSection" class="leap-list">
-    <h3 style="margin:0 0 10px 0; color: var(--success); font-size: 1rem;">Danh sách năm nhuận (1950 - 2080)</h3>
+    <h3 style="margin-top:0; color: var(--success);">Năm nhuận (1950 - 2080)</h3>
     <div class="leap-scroll">
-        <table id="leapTable"><thead><tr><th>Năm Âm Lịch</th><th>Tháng nhuận</th></tr></thead><tbody></tbody></table>
+        <table id="leapTable"><thead><tr><th>Năm Âm</th><th>Tháng nhuận</th></tr></thead><tbody></tbody></table>
     </div>
 </div>
 
@@ -68,31 +99,17 @@ const LEAP_DATA = {
 
 function getNewMoon(k) {
     let T = k / 1236.85;
-    let T2 = T * T;
-    let JDN = 2451550.09766 + 29.530588861 * k + 0.0001337 * T2;
+    let JDN = 2451550.09766 + 29.530588861 * k + 0.0001337 * T * T;
     let dr = Math.PI / 180;
-    let M = (2.5534 + 29.10535670 * k) * dr;
-    let Mpr = (201.5643 + 385.81693528 * k) * dr;
-    let F = (160.7108 + 390.67050284 * k) * dr;
-    let E = 1 - 0.002516 * T - 0.0000074 * T2;
-    let delta = -0.40720 * Math.sin(Mpr)
-              + 0.17241 * E * Math.sin(M)
-              + 0.01608 * Math.sin(2 * Mpr)
-              + 0.01039 * Math.sin(2 * F)
-              - 0.00739 * E * Math.sin(Mpr - M)
-              - 0.00514 * E * Math.sin(Mpr + M)
-              + 0.00208 * E * E * Math.sin(2 * M)
-              - 0.00111 * Math.sin(Mpr - 2 * F)
-              - 0.00057 * Math.sin(Mpr + 2 * F)
-              + 0.00056 * E * Math.sin(2 * Mpr + M)
-              - 0.00042 * Math.sin(3 * Mpr);
+    let M = (2.5534 + 29.10535670 * k) * dr, Mpr = (201.5643 + 385.81693528 * k) * dr;
+    let F = (160.7108 + 390.67050284 * k) * dr, E = 1 - 0.002516 * T;
+    let delta = -0.4072 * Math.sin(Mpr) + 0.1724 * E * Math.sin(M) + 0.0161 * Math.sin(2 * Mpr) + 0.0104 * Math.sin(2 * F);
     return JDN + delta + 7/24; 
 }
 
 function getJD(d, m, y) {
     if (m <= 2) { y -= 1; m += 12; }
-    let a = Math.floor(y / 100);
-    let b = 2 - a + Math.floor(a / 4);
+    let a = Math.floor(y / 100), b = 2 - a + Math.floor(a / 4);
     return Math.floor(365.25 * (y + 4716)) + Math.floor(30.6001 * (m + 1)) + d + b - 1524.5;
 }
 
@@ -103,32 +120,27 @@ function getLunarDate(d, m, y) {
     while (nm > jd) { k--; nm = Math.floor(getNewMoon(k) + 0.5); }
     let next_nm = Math.floor(getNewMoon(k + 1) + 0.5);
     while (jd >= next_nm) { k++; nm = next_nm; next_nm = Math.floor(getNewMoon(k + 1) + 0.5); }
-    let day = Math.round(jd - nm + 1);
-    
-    let currentK = 298; let lYear = 2024; let lMonth = 1; let isLeap = false;
-    
+    let currentK = 298, lYear = 2024, lMonth = 1, isLeap = false;
     if (k > currentK) {
         while (currentK < k) {
             currentK++;
             if (isLeap) { lMonth++; isLeap = false; if (lMonth > 12) { lMonth = 1; lYear++; } } 
             else {
-                let leapMonth = LEAP_DATA[lYear];
-                if (leapMonth && lMonth === leapMonth) { isLeap = true; } 
+                if (LEAP_DATA[lYear] === lMonth) isLeap = true;
                 else { lMonth++; if (lMonth > 12) { lMonth = 1; lYear++; } }
             }
         }
     } else if (k < currentK) {
         while (currentK > k) {
             currentK--;
-            if (isLeap) { isLeap = false; } 
+            if (isLeap) isLeap = false;
             else {
                 lMonth--; if (lMonth < 1) { lYear--; lMonth = 12; }
-                let leapMonth = LEAP_DATA[lYear];
-                if (leapMonth && lMonth === leapMonth) { isLeap = true; }
+                if (LEAP_DATA[lYear] === lMonth) isLeap = true;
             }
         }
     }
-    return { ld: day, lm: lMonth, isLeap: isLeap };
+    return { ld: jd - nm + 1, lm: lMonth, isLeap: isLeap };
 }
 
 let viewDate = new Date();
@@ -136,66 +148,46 @@ let viewDate = new Date();
 function render() {
     const grid = document.getElementById('grid');
     const y = viewDate.getFullYear(), m = viewDate.getMonth();
-    document.getElementById('monthTitle').innerText = `THÁNG ${String(m+1).padStart(2,'0')} / ${y}`;
+    document.getElementById('monthTitle').innerText = `THÁNG ${m+1} / ${y}`;
     document.getElementById('selMonth').value = m;
     document.getElementById('inpYear').value = y;
     grid.innerHTML = '';
-
     let firstDay = new Date(y, m, 1).getDay();
-    let offset = (firstDay === 0) ? 6 : firstDay - 1; 
-
-    const totalDays = new Date(y, m + 1, 0).getDate();
-
-    for (let i = 0; i < offset; i++) {
-        const div = document.createElement('div'); div.className = 'cell empty'; grid.appendChild(div);
-    }
-
-    for (let d = 1; d <= totalDays; d++) {
-        const cell = document.createElement('div'); cell.className = 'cell';
-        const dateObj = new Date(y, m, d);
-        const dow = dateObj.getDay();
-        const today = new Date();
-        if (d === today.getDate() && m === today.getMonth() && y === today.getFullYear()) cell.classList.add('today');
-
+    let offset = (firstDay === 0) ? 6 : firstDay - 1;
+    for (let i = 0; i < offset; i++) grid.innerHTML += '<div class="cell empty"></div>';
+    for (let d = 1; d <= new Date(y, m + 1, 0).getDate(); d++) {
+        const dateObj = new Date(y, m, d), dow = dateObj.getDay();
         const lun = getLunarDate(d, m + 1, y);
-        let txt = lun.ld;
-        if (lun.ld === 1) txt = `1/${lun.lm}${lun.isLeap ? 'n' : ''}`;
-
-        cell.innerHTML = `<div class="solar ${dow == 0 ? 'sun' : (dow == 6 ? 'sat' : '')}">${d}</div>
-                          <div class="lunar ${lun.ld == 1 || lun.ld == 15 ? 'special-lunar' : ''}">${txt}</div>`;
-        grid.appendChild(cell);
+        const isToday = d === new Date().getDate() && m === new Date().getMonth() && y === new Date().getFullYear();
+        let lunarTxt = lun.ld === 1 ? `${lun.ld}/${lun.lm}${lun.isLeap?'n':''}` : lun.ld;
+        grid.innerHTML += `<div class="cell ${isToday?'today':''}">
+            <div class="solar ${dow==0?'sun':(dow==6?'sat':'')}">${d}</div>
+            <div class="lunar ${lun.ld==1||lun.ld==15?'special-lunar':''}">${lunarTxt}</div>
+        </div>`;
     }
-}
-
-function toggleLeapList() {
-    const sec = document.getElementById('leapSection');
-    const tbody = document.querySelector('#leapTable tbody');
-    if (sec.style.display === 'block') { sec.style.display = 'none'; return; }
-    tbody.innerHTML = '';
-    const curY = parseInt(document.getElementById('inpYear').value);
-    const years = Object.keys(LEAP_DATA).map(Number).sort((a,b)=>a-b);
-    let activeRow = null;
-    years.forEach(yr => {
-        const tr = document.createElement('tr');
-        tr.innerHTML = `<td>Năm ${yr}</td><td>Tháng ${LEAP_DATA[yr]}</td>`;
-        if(yr === curY) { tr.style.background = "#fff9c4"; activeRow = tr; }
-        tbody.appendChild(tr);
-    });
-    sec.style.display = 'block';
-    sec.scrollIntoView({ behavior: 'smooth' });
-    if (activeRow) { setTimeout(() => activeRow.scrollIntoView({ block: 'center' }), 100); }
 }
 
 function init() {
     const sel = document.getElementById('selMonth');
-    for(let i=0; i<12; i++) {
-        const opt = document.createElement('option'); opt.value = i; opt.innerText = "Tháng "+(i+1); sel.appendChild(opt);
-    }
+    const months = ["Tháng 1", "Tháng 2", "Tháng 3", "Tháng 4", "Tháng 5", "Tháng 6", "Tháng 7", "Tháng 8", "Tháng 9", "Tháng 10", "Tháng 11", "Tháng 12"];
+    months.forEach((name, i) => { let opt = new Option(name, i); sel.add(opt); });
     render();
 }
-function changeMonth(n) { viewDate.setMonth(viewDate.getMonth()+n); render(); }
+function changeMonth(n) { viewDate.setMonth(viewDate.getMonth() + n); render(); }
+function changeYear(n) { viewDate.setFullYear(viewDate.getFullYear() + n); render(); }
 function jump() { viewDate = new Date(document.getElementById('inpYear').value, document.getElementById('selMonth').value, 1); render(); }
 function goToday() { viewDate = new Date(); render(); }
+function toggleLeapList() {
+    const sec = document.getElementById('leapSection');
+    if (sec.style.display === 'block') { sec.style.display = 'none'; return; }
+    const tbody = document.querySelector('#leapTable tbody');
+    tbody.innerHTML = '';
+    Object.keys(LEAP_DATA).sort().forEach(yr => {
+        tbody.innerHTML += `<tr><td>Năm ${yr}</td><td>Tháng ${LEAP_DATA[yr]}</td></tr>`;
+    });
+    sec.style.display = 'block';
+    sec.scrollIntoView({ behavior: 'smooth' });
+}
 init();
 </script>
 </body>
