@@ -3,60 +3,139 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>Lịch Vạn Niên - Tối Ưu iPhone</title>
+    <title>Lịch Vạn Niên - Dark Mode Interactive</title>
     <style>
-        :root { --primary: #c62828; --secondary: #1565c0; --bg: #f5f6fa; --success: #2e7d32; --lunar-special: #fffde7; }
-        * { box-sizing: border-box; -webkit-tap-highlight-color: transparent; }
-        body { font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif; background: var(--bg); display: flex; flex-direction: column; align-items: center; padding: 10px; margin: 0; }
-        
-        .calendar-box { background: #fff; width: 100%; max-width: 450px; border-radius: 20px; box-shadow: 0 10px 40px rgba(0,0,0,0.1); overflow: hidden; }
-        .header { background: var(--primary); color: white; padding: 18px; text-align: center; }
-        .header h2 { margin: 0; font-size: 1.3rem; letter-spacing: 1px; }
+        :root {
+            --primary: #ef5350;
+            --secondary: #64b5f6;
+            --bg: #121212;
+            --success: #66bb6a;
+            --lunar-special: #3d3b2c;
+            --box-bg: #1e1e1e;
+            --text-main: #f5f5f5;
+            --text-muted: #aaaaaa;
+            --border-color: #333333;
+            --input-bg: #2d2d2d;
+            --empty-bg: #1a1a1a;
+            --today-bg: #3a1c1c;
+            --grid-header-bg: #252525;
+            --selected-bg: #1565c0;
+        }
 
-        .controls { padding: 15px; background: #fff; border-bottom: 1px solid #eee; display: flex; flex-direction: column; gap: 12px; }
+        * { box-sizing: border-box; -webkit-tap-highlight-color: transparent; }
+        body { 
+            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif; 
+            background: var(--bg); 
+            color: var(--text-main);
+            display: flex; flex-direction: column; align-items: center; padding: 10px; margin: 0; 
+        }
+        
+        .calendar-box { 
+            background: var(--box-bg); 
+            width: 100%; max-width: 450px; 
+            border-radius: 20px; 
+            box-shadow: 0 10px 40px rgba(0,0,0,0.5); 
+            overflow: hidden; 
+        }
+
+        /* Phần hiển thị Thông tin ngày chọn */
+        .today-banner {
+            background: linear-gradient(135deg, var(--primary), var(--secondary));
+            color: white;
+            padding: 25px 20px;
+            text-align: center;
+            position: relative;
+            transition: all 0.3s ease;
+        }
+        
+        .today-dow { font-size: 1.2rem; font-weight: 500; text-transform: uppercase; letter-spacing: 1px; opacity: 0.9; }
+        .today-solar { font-size: 4.5rem; font-weight: 800; line-height: 1; margin: 5px 0; text-shadow: 2px 2px 8px rgba(0,0,0,0.2); }
+        .today-my { font-size: 1.1rem; font-weight: 500; margin-bottom: 12px; opacity: 0.9;}
+        .today-lunar { 
+            font-size: 1.1rem; 
+            background: rgba(255,255,255,0.25); 
+            padding: 6px 18px; 
+            border-radius: 20px; 
+            display: inline-block; 
+            font-weight: bold; 
+            backdrop-filter: blur(5px); 
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+        }
+        .today-canchi {
+            font-size: 0.95rem;
+            margin-top: 12px;
+            opacity: 0.9;
+            font-weight: 500;
+        }
+
+        .header { background: var(--box-bg); color: var(--primary); padding: 15px; text-align: center; border-bottom: 1px solid var(--border-color); }
+        .header h2 { margin: 0; font-size: 1.2rem; letter-spacing: 1px; }
+
+        .controls { padding: 15px; background: var(--box-bg); border-bottom: 1px solid var(--border-color); display: flex; flex-direction: column; gap: 12px; }
         .control-row { display: flex; align-items: center; justify-content: center; gap: 10px; }
         
-        select, input { padding: 10px; border-radius: 8px; border: 1px solid #ddd; font-size: 1rem; text-align: center; background: #f9f9f9; }
+        select, input { padding: 10px; border-radius: 8px; border: 1px solid var(--border-color); font-size: 1rem; text-align: center; background: var(--input-bg); color: var(--text-main); }
         input[type="number"] { width: 80px; font-weight: bold; color: var(--primary); }
         
         button { 
-            padding: 10px 15px; border-radius: 8px; border: 1px solid #ddd; 
-            background: #fff; cursor: pointer; font-weight: bold; font-size: 1.1rem;
+            padding: 10px 15px; border-radius: 8px; border: 1px solid var(--border-color); 
+            background: var(--box-bg); color: var(--text-main); cursor: pointer; font-weight: bold; font-size: 1.1rem;
             min-width: 45px; transition: background 0.2s;
         }
-        button:active { background: #eee; }
+        button:active { background: var(--input-bg); }
         .btn-nav { color: var(--primary); border-color: var(--primary); }
         
         .action-group { display: flex; width: 100%; gap: 10px; }
         .btn-today { background: var(--secondary); color: white; border: none; flex: 1; font-size: 0.9rem; }
         .btn-leap { background: var(--success); color: white; border: none; flex: 1; font-size: 0.9rem; }
 
-        .weekdays { display: grid; grid-template-columns: repeat(7, 1fr); background: #f8f9fa; text-align: center; font-weight: bold; font-size: 0.8rem; padding: 12px 0; color: #666; }
+        .weekdays { display: grid; grid-template-columns: repeat(7, 1fr); background: var(--grid-header-bg); text-align: center; font-weight: bold; font-size: 0.8rem; padding: 12px 0; color: var(--text-muted); }
         .days-grid { display: grid; grid-template-columns: repeat(7, 1fr); }
-        .cell { aspect-ratio: 1/1; border-right: 1px solid #f0f0f0; border-bottom: 1px solid #f0f0f0; display: flex; flex-direction: column; align-items: center; justify-content: center; position: relative; }
         
-        /* Hiệu ứng màu nền cho ngày đặc biệt (1 và 15 âm) */
+        .cell { 
+            aspect-ratio: 1/1; 
+            border-right: 1px solid var(--border-color); 
+            border-bottom: 1px solid var(--border-color); 
+            display: flex; 
+            flex-direction: column; 
+            align-items: center; 
+            justify-content: center; 
+            position: relative; 
+            cursor: pointer;
+            transition: background 0.2s;
+        }
+        .cell:active { background: var(--selected-bg); }
+        
         .special-bg { background-color: var(--lunar-special) !important; }
         
         .solar { font-size: 1.2rem; font-weight: 600; z-index: 2; }
-        .lunar { font-size: 0.75rem; color: #888; margin-top: 3px; z-index: 2; }
+        .lunar { font-size: 0.75rem; color: var(--text-muted); margin-top: 3px; z-index: 2; }
         .sun { color: var(--primary); }
         .sat { color: var(--secondary); }
         
-        .today { background: #fff5f5; outline: 2px solid var(--primary); z-index: 5; border-radius: 4px; }
+        .today { background: var(--today-bg); outline: 2px solid var(--primary); z-index: 5; border-radius: 4px; }
+        .selected-cell { background: var(--selected-bg) !important; color: white !important; }
         .special-text { color: var(--primary); font-weight: bold; }
-        .empty { background: #fafafa; }
+        .empty { background: var(--empty-bg); cursor: default; }
 
-        .leap-list { display: none; width: 100%; max-width: 450px; background: white; border-radius: 15px; padding: 15px; box-shadow: 0 4px 20px rgba(0,0,0,0.15); margin-top: 15px; }
-        .leap-scroll { max-height: 250px; overflow-y: auto; border: 1px solid #eee; border-radius: 10px; }
+        .leap-list { display: none; width: 100%; max-width: 450px; background: var(--box-bg); border-radius: 15px; padding: 15px; box-shadow: 0 4px 20px rgba(0,0,0,0.3); margin-top: 15px; }
+        .leap-scroll { max-height: 250px; overflow-y: auto; border: 1px solid var(--border-color); border-radius: 10px; }
         table { width: 100%; border-collapse: collapse; }
-        th, td { padding: 12px; border-bottom: 1px solid #eee; text-align: left; font-size: 1rem; }
-        th { position: sticky; top: 0; background: #f8f9fa; }
+        th, td { padding: 12px; border-bottom: 1px solid var(--border-color); text-align: left; font-size: 1rem; color: var(--text-main); }
+        th { position: sticky; top: 0; background: var(--grid-header-bg); }
     </style>
 </head>
 <body>
 
 <div class="calendar-box">
+    <div class="today-banner" id="topBanner">
+        <div class="today-dow" id="tdDow">Thứ --</div>
+        <div class="today-solar" id="tdSolar">--</div>
+        <div class="today-my" id="tdMonthYear">Tháng --, Năm ----</div>
+        <div class="today-lunar" id="tdLunar">Âm lịch: --/--</div>
+        <div class="today-canchi" id="tdCanChi">--</div>
+    </div>
+
     <div class="header"><h2 id="monthTitle">THÁNG -- / ----</h2></div>
     
     <div class="controls">
@@ -73,7 +152,7 @@
         </div>
 
         <div class="action-group">
-            <button class="btn-today" onclick="goToday()">Hôm nay</button>
+            <button class="btn-today" onclick="goToday()">Về Hôm nay</button>
             <button class="btn-leap" onclick="toggleLeapList()">Xem năm nhuận</button>
         </div>
     </div>
@@ -97,6 +176,10 @@ const LEAP_DATA = {
     1990:5, 1993:3, 1995:8, 1998:5, 2001:4, 2004:2, 2006:7, 2009:5, 2012:4, 2014:9, 2017:6, 2020:4, 2023:2, 2025:6, 2028:5, 2031:3, 2033:11, 2036:6, 2039:5, 2042:2, 2044:9, 2047:5,
     2050:3, 2052:8, 2055:6, 2058:4, 2061:3, 2063:7, 2066:5, 2069:4, 2072:2, 2074:6, 2077:5, 2080:3
 };
+
+const CAN = ["Canh", "Tân", "Nhâm", "Quý", "Giáp", "Ất", "Bính", "Đinh", "Mậu", "Kỷ"];
+const CHI = ["Thân", "Dậu", "Tuất", "Hợi", "Tý", "Sửu", "Dần", "Mão", "Thìn", "Tỵ", "Ngọ", "Mùi"];
+const CHI_THANG = ["Tý", "Sửu", "Dần", "Mão", "Thìn", "Tỵ", "Ngọ", "Mùi", "Thân", "Dậu", "Tuất", "Hợi"];
 
 function getNewMoon(k) {
     let T = k / 1236.85;
@@ -141,10 +224,38 @@ function getLunarDate(d, m, y) {
             }
         }
     }
-    return { ld: jd - nm + 1, lm: lMonth, isLeap: isLeap };
+    return { ld: jd - nm + 1, lm: lMonth, ly: lYear, isLeap: isLeap };
 }
 
 let viewDate = new Date();
+
+// Hàm cập nhật Banner thông tin chi tiết (dùng chung cho cả click và load trang)
+function displayDateInfo(date) {
+    const days = ["Chủ Nhật", "Thứ Hai", "Thứ Ba", "Thứ Tư", "Thứ Năm", "Thứ Sáu", "Thứ Bảy"];
+    const d = date.getDate(), m = date.getMonth() + 1, y = date.getFullYear();
+    
+    // Cập nhật Dương lịch
+    document.getElementById('tdDow').innerText = days[date.getDay()];
+    document.getElementById('tdSolar').innerText = d;
+    document.getElementById('tdMonthYear').innerText = `Tháng ${m}, Năm ${y}`;
+    
+    // Cập nhật Âm lịch
+    const lun = getLunarDate(d, m, y);
+    let lunarStr = `${lun.ld}/${lun.lm}${lun.isLeap ? ' (Nhuận)' : ''}`;
+    document.getElementById('tdLunar').innerText = `Âm lịch: ${lunarStr}`;
+
+    // Tính Can Chi
+    const yearCan = CAN[lun.ly % 10];
+    const yearChi = CHI[lun.ly % 12];
+    const canOffset = [8, 0, 2, 4, 6, 8, 0, 2, 4, 6][lun.ly % 10];
+    const monthCan = CAN[(canOffset + lun.lm - 1) % 10];
+    const monthChi = CHI_THANG[(lun.lm + 1) % 12];
+    const jd = Math.floor(getJD(d, m, y) + 0.5);
+    const dayCan = CAN[(jd + 3) % 10];
+    const dayChi = CHI[(jd + 5) % 12];
+
+    document.getElementById('tdCanChi').innerHTML = `Ngày <b>${dayCan} ${dayChi}</b>, Tháng <b>${monthCan} ${monthChi}</b>, Năm <b>${yearCan} ${yearChi}</b>`;
+}
 
 function render() {
     const grid = document.getElementById('grid');
@@ -153,37 +264,61 @@ function render() {
     document.getElementById('selMonth').value = m;
     document.getElementById('inpYear').value = y;
     grid.innerHTML = '';
+    
     let firstDay = new Date(y, m, 1).getDay();
     let offset = (firstDay === 0) ? 6 : firstDay - 1;
     for (let i = 0; i < offset; i++) grid.innerHTML += '<div class="cell empty"></div>';
     
-    for (let d = 1; d <= new Date(y, m + 1, 0).getDate(); d++) {
+    const daysInMonth = new Date(y, m + 1, 0).getDate();
+    for (let d = 1; d <= daysInMonth; d++) {
         const dateObj = new Date(y, m, d), dow = dateObj.getDay();
         const lun = getLunarDate(d, m + 1, y);
         const isToday = d === new Date().getDate() && m === new Date().getMonth() && y === new Date().getFullYear();
-        
-        // Kiểm tra ngày đặc biệt (1 và 15 âm lịch)
         const isSpecialDay = (lun.ld === 1 || lun.ld === 15);
-        
         let lunarTxt = lun.ld === 1 ? `${lun.ld}/${lun.lm}${lun.isLeap?'n':''}` : lun.ld;
         
-        grid.innerHTML += `<div class="cell ${isToday ? 'today' : ''} ${isSpecialDay ? 'special-bg' : ''}">
+        // Tạo element div cho ngày
+        const cell = document.createElement('div');
+        cell.className = `cell ${isToday ? 'today' : ''} ${isSpecialDay ? 'special-bg' : ''}`;
+        cell.innerHTML = `
             <div class="solar ${dow==0?'sun':(dow==6?'sat':'')}">${d}</div>
             <div class="lunar ${lun.ld==1||lun.ld==15?'special-text':''}">${lunarTxt}</div>
-        </div>`;
+        `;
+        
+        // Sự kiện Click vào ngày
+        cell.onclick = () => {
+            // Xóa highlight cũ (nếu có)
+            document.querySelectorAll('.cell').forEach(c => c.classList.remove('selected-cell'));
+            // Thêm highlight mới
+            cell.classList.add('selected-cell');
+            // Cập nhật banner
+            displayDateInfo(dateObj);
+            // Cuộn lên đầu trang nếu là mobile
+            if(window.innerWidth < 600) window.scrollTo({top: 0, behavior: 'smooth'});
+        };
+        
+        grid.appendChild(cell);
     }
 }
 
 function init() {
+    // Hiển thị mặc định ngày hiện tại
+    displayDateInfo(new Date());
+    
     const sel = document.getElementById('selMonth');
     const months = ["Tháng 1", "Tháng 2", "Tháng 3", "Tháng 4", "Tháng 5", "Tháng 6", "Tháng 7", "Tháng 8", "Tháng 9", "Tháng 10", "Tháng 11", "Tháng 12"];
     months.forEach((name, i) => { let opt = new Option(name, i); sel.add(opt); });
     render();
 }
+
 function changeMonth(n) { viewDate.setMonth(viewDate.getMonth() + n); render(); }
 function changeYear(n) { viewDate.setFullYear(viewDate.getFullYear() + n); render(); }
 function jump() { viewDate = new Date(document.getElementById('inpYear').value, document.getElementById('selMonth').value, 1); render(); }
-function goToday() { viewDate = new Date(); render(); }
+function goToday() { 
+    viewDate = new Date(); 
+    displayDateInfo(viewDate);
+    render(); 
+}
 function toggleLeapList() {
     const sec = document.getElementById('leapSection');
     if (sec.style.display === 'block') { sec.style.display = 'none'; return; }
@@ -195,6 +330,7 @@ function toggleLeapList() {
     sec.style.display = 'block';
     sec.scrollIntoView({ behavior: 'smooth' });
 }
+
 init();
 </script>
 </body>
