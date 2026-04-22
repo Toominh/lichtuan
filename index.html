@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>Lịch Vạn Niên Pro - Quản Lý Kỷ Niệm</title>
+    <title>Lịch Vạn Niên TU AN</title>
     <style>
         :root {
             --primary: #ef5350;
@@ -44,7 +44,8 @@
         .today-canchi { font-size: 0.8rem; margin-top: 15px; opacity: 0.85; font-weight: 400; line-height: 1.3; }
         
         .holiday-container { margin-top: 10px; display: flex; flex-direction: column; gap: 4px; align-items: center; }
-        .holiday-item { font-size: 0.75rem; font-weight: 600; text-transform: uppercase; padding: 2px 8px; border-radius: 4px; background: rgba(0,0,0,0.15); }
+        .holiday-item { font-size: 0.75rem; font-weight: 600; text-transform: uppercase; padding: 2px 8px; border-radius: 4px; 
+        }
         
         .header { background: var(--box-bg); color: var(--primary); padding: 12px 15px; border-bottom: 1px solid var(--border-color); display: flex; justify-content: center; align-items: center; position: relative; }
         .header h2 { margin: 0; font-size: 1.1rem; letter-spacing: 1px; }
@@ -54,9 +55,9 @@
         .control-row { display: flex; align-items: center; justify-content: space-between; gap: 5px; }
         .group-item { display: flex; align-items: center; gap: 4px; flex: 1; }
         
-        select, input { padding: 8px 4px; border-radius: 6px; border: 1px solid var(--border-color); background: var(--input-bg); color: var(--text-main); font-size: 0.9rem; }
+        select, input { padding: 8px 4px; border-radius: 6px; border: 1px solid var(--border-color); background: var(--input-bg); color: var(--text-main); font-size: 1.2rem; }
         select { flex: 1; min-width: 60px; }
-        input[type="number"] { width: 60px; font-weight: bold; color: var(--primary); }
+        input[type="number"] { width: 80px; font-weight: bold; color: #fff; }
         
         button { padding: 8px 10px; border-radius: 6px; border: 1px solid var(--border-color); background: var(--box-bg); color: var(--text-main); cursor: pointer; font-weight: bold; transition: 0.2s; font-size: 0.85rem; }
         button:active { opacity: 0.6; }
@@ -89,7 +90,7 @@
 
         /* Admin Controls */
         .admin-controls { display: flex; gap: 8px; justify-content: center; margin-top: 15px; width: 100%; max-width: 450px; }
-        .btn-admin { background: #455a64; color: white; border: none; padding: 10px 15px; font-size: 0.8rem; border-radius: 8px; flex: 1; }
+        .btn-admin { background: #455a64; color: white; border: none; padding: 10px 5px; font-size: 0.8rem; border-radius: 8px; flex: 1; }
 
         .event-row { display: flex; gap: 5px; margin-bottom: 8px; align-items: center; }
         .event-row input[type="text"] { flex: 1; padding: 8px; border: 1px solid var(--border-color); background: var(--input-bg); color: #fff; border-radius: 4px; }
@@ -116,6 +117,39 @@
         th { background: var(--grid-header-bg); color: var(--success); padding: 10px; position: sticky; top: 0; z-index: 10; }
         td { padding: 10px 5px; border-bottom: 1px solid var(--border-color); text-align: center; color: var(--text-main); }
         .highlight-leap { background-color: rgba(102, 187, 106, 0.15) !important; border-left: 4px solid var(--success); }
+
+/* Style cho icon SVG trong button */
+button svg {
+    width: 26px;
+    height: 26px;
+    vertical-align: middle;
+    margin-right: 2px; /* Khoảng cách với chữ */
+    fill: none;
+    stroke: currentColor;
+    stroke-width: 2;
+    stroke-linecap: round;
+    stroke-linejoin: round;
+}
+
+/* Riêng nút điều hướng thì không cần margin-right */
+.btn-nav svg { margin-right: 0; width: 26px; height: 26px; }
+
+/* Hiệu ứng hover cho nút chuyên nghiệp hơn */
+button:hover {
+    filter: brightness(1.2);
+    transform: translateY(-1px);
+    box-shadow: 0 4px 12px rgba(0,0,0,0.3);
+}
+.modal-body li {
+    padding: 6px;
+    font-size: 1rem;
+}
+.modal-body h4 {
+    font-size: 1rem;
+}
+.modal-body table {
+    font-size: 1rem;
+}
     </style>
 </head>
 <body>
@@ -138,24 +172,35 @@
     <div class="controls">
         <div class="control-row">
             <div class="group-item">
-                <button class="btn-nav" onclick="changeMonth(-1)">❮</button>
+                <button class="btn-nav" onclick="changeMonth(-1)"><svg><polyline points="15 18 9 12 15 6"></polyline></svg></button>
                 <select id="selMonth" onchange="jump()"></select>
-                <button class="btn-nav" onclick="changeMonth(1)">❯</button>
+                <button class="btn-nav" onclick="changeMonth(1)"><svg><polyline points="9 18 15 12 9 6"></polyline></svg></button>
             </div>
+
             <div class="group-item" style="justify-content: flex-end;">
-                <button class="btn-nav" onclick="changeYear(-1)">-</button>
+                <button class="btn-nav" onclick="changeYear(-1)"><svg><line x1="5" y1="12" x2="19" y2="12"></line></svg></button>
                 <input type="number" id="inpYear" onchange="jump()">
-                <button class="btn-nav" onclick="changeYear(1)">+</button>
+                <button class="btn-nav" onclick="changeYear(1)"><svg><line x1="12" y1="5" x2="12" y2="19"></line><line x1="5" y1="12" x2="19" y2="12"></line></svg></button>
             </div>
         </div>
         
-        <div class="action-group">
-            <button class="btn-today" onclick="goToday()">TODAY</button>
-            <button class="btn-event" onclick="showUpcomingEvents()">SỰ KIỆN</button>
-            <button class="btn-tet" onclick="goToTet()">TẾT</button>
-            <button class="btn-leap" onclick="openLeapModal()">NHUẬN</button>
-            <button class="btn-tietkhi" onclick="showTietKhiPopup()">TIẾT KHÍ</button>
-        </div>
+    <div class="action-group">
+        <button class="btn-today" onclick="goToday()">
+          TODAY
+        </button>
+        <button class="btn-event" onclick="showUpcomingEvents()">
+         SỰ KIỆN
+        </button>
+        <button class="btn-tet" onclick="goToTet()">
+          TẾT
+        </button>
+        <button class="btn-leap" onclick="openLeapModal()">
+            NHUẬN
+        </button>
+        <button class="btn-tietkhi" onclick="showTietKhiPopup()">
+        TIẾT KHÍ
+        </button>
+    </div>
     </div>
 
     <div class="weekdays"><div>T2</div><div>T3</div><div>T4</div><div>T5</div><div>T6</div><div class="sat">T7</div><div class="sun">CN</div></div>
@@ -163,12 +208,50 @@
 </div>
 
 <div class="admin-controls">
-    <button class="btn-admin" onclick="openCategoryModal()">➕ Đề Mục</button>
-    <button class="btn-admin" onclick="openManageModal()">⚙️ Quản Lý</button>
-    <button class="btn-admin" onclick="exportData()">📤 Xuất</button>
-    <button class="btn-admin" onclick="importData()">📥 Nhập</button>
+    <button class="btn-admin" onclick="openCategoryModal()">
+        <svg><line x1="12" y1="5" x2="12" y2="19"></line><line x1="5" y1="12" x2="19" y2="12"></line></svg> Thêm lịch
+    </button>
+    <button class="btn-admin" onclick="openManageModal()">
+        <svg><circle cx="12" cy="12" r="3"></circle><path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 0 1 0 2.83 2 2 0 0 1-2.83 0l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-2 2 2 2 0 0 1-2-2v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 0 1-2.83 0 2 2 0 0 1 0-2.83l.06-.06a1.65 1.65 0 0 0 .33-1.82 1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1-2-2 2 2 0 0 1 2-2h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 0 1 0-2.83 2 2 0 0 1 2.83 0l.06.06a1.65 1.65 0 0 0 1.82.33H9a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 2-2 2 2 0 0 1 2 2v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 0 1 2.83 0 2 2 0 0 1 0 2.83l-.06.06a1.65 1.65 0 0 0-.33 1.82V9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 2 2 2 2 0 0 1-2 2h-.09a1.65 1.65 0 0 0-1.51 1z"></path></svg> Quản Lý
+    </button>
+    <button class="btn-admin" onclick="exportData()">
+        <svg><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"></path><polyline points="17 8 12 3 7 8"></polyline><line x1="12" y1="3" x2="12" y2="15"></line></svg> Xuất
+    </button>
+    <button class="btn-admin" onclick="importData()">
+        <svg><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"></path><polyline points="7 10 12 15 17 10"></polyline><line x1="12" y1="15" x2="12" y2="3"></line></svg> Nhập
+    </button>
 </div>
 
+<div class="admin-controls" style="margin-top: 10px;">
+    <button class="btn-admin" style="background: #2e7d32;" onclick="exportFullHTML()">
+        <svg><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"></path><polyline points="14 2 14 8 20 8"></polyline><line x1="16" y1="13" x2="8" y2="13"></line><line x1="16" y1="17" x2="8" y2="17"></line><polyline points="10 9 9 9 8 9"></polyline></svg> Sao Lưu
+    </button>
+    <button class="btn-admin" style="background: #1565c0;" onclick="showAboutPopup()">
+        <svg><circle cx="12" cy="12" r="10"></circle><line x1="12" y1="16" x2="12" y2="12"></line><line x1="12" y1="8" x2="12.01" y2="8"></line></svg> Giới thiệu
+    </button>
+</div>
+
+<div id="aboutPopup" class="modal-overlay" onclick="hideAboutPopup()">
+    <div class="modal-content" onclick="event.stopPropagation()">
+        <div class="modal-header">
+            <h3>Giới Thiệu Lịch Vạn Niên Pro</h3>
+            <button class="close-btn" onclick="hideAboutPopup()">×</button>
+        </div>
+        <div class="modal-body" style="line-height: 1.6; text-align: justify;">
+            <p><strong>Lịch Vạn Niên Pro</strong> là công cụ quản lý thời gian kết hợp hoàn hảo giữa hiện đại và truyền thống. Trang web được thiết kế tối ưu cho trải nghiệm người dùng với các tính năng nổi bật:</p>
+            <ul>
+                <li>Xem lịch âm dương, Can Chi, Tiết khí chính xác.</li>
+                <li>Quản lý sự kiện cá nhân, ngày kỷ niệm, sinh nhật.</li>
+                <li>Theo dõi các ngày lễ quan trọng và năm nhuận.</li>
+                <li>Giao diện Dark Mode chuyên nghiệp, thân thiện với mắt.</li>
+            </ul>
+            <p>Sản phẩm được phát triển nhằm mục đích lưu giữ các giá trị văn hóa truyền thống Việt Nam trong kỷ nguyên số.</p>
+            <div style="text-align: center; margin-top: 20px; color: var(--text-muted); font-size: 0.8rem;">
+                Phiên bản 1.0.0 &copy; 2026
+            </div>
+        </div>
+    </div>
+</div>
 <div id="categoryModal" class="modal-overlay">
     <div class="modal-content">
         <div class="modal-header">
@@ -178,7 +261,7 @@
         <div class="modal-body">
             <input type="hidden" id="editCatId">
             <div style="margin-bottom:15px">
-                <label>Tên đề mục:</label>
+                <label>Tên lịch:</label>
                 <input type="text" id="catName" style="width:100%" placeholder="Ví dụ: Gia đình, Công việc...">
             </div>
             <div style="margin-bottom:15px; display: flex; gap: 10px;">
@@ -340,7 +423,7 @@ function displayDateInfo(date) {
     
     const prevDate = new Date(y, m - 1, d - 1);
     if (tkToday !== getTietKhi(prevDate.getDate(), prevDate.getMonth() + 1, prevDate.getFullYear())) {
-        holidayBox.innerHTML += `<div class="holiday-item" style="color:#fff; border:1px solid #fff">🌿 TIẾT ${tkToday.toUpperCase()}</div>`;
+        holidayBox.innerHTML += `<div class="holiday-item" style="color:#fcea32;">🌿 TIẾT ${tkToday.toUpperCase()}</div>`;
     }
 
     getEventsAt(d, m, y, false).forEach(ev => holidayBox.innerHTML += `<div class="holiday-item" style="color:${ev.color}">⭐ ${ev.name}</div>`);
@@ -643,6 +726,35 @@ function hideUpcomingEvents() { document.getElementById('eventsPopup').style.dis
     setInterval(updateClock, 1000);
     updateClock();
 })();
+
+// Chức năng xuất toàn bộ trang web ra file HTML
+function exportFullHTML() {
+    // Lấy toàn bộ nội dung HTML hiện tại
+    const htmlContent = document.documentElement.outerHTML;
+    const blob = new Blob([htmlContent], { type: 'text/html' });
+    const url = URL.createObjectURL(blob);
+    
+    const a = document.createElement('a');
+    a.href = url;
+    a.download = 'Lich_Van_Nien_Pro_Backup.html';
+    document.body.appendChild(a);
+    a.click();
+    
+    // Dọn dẹp
+    setTimeout(() => {
+        document.body.removeChild(a);
+        window.URL.revokeObjectURL(url);
+    }, 0);
+}
+
+// Chức năng hiển thị/ẩn Popup Giới thiệu
+function showAboutPopup() {
+    document.getElementById('aboutPopup').style.display = 'block';
+}
+
+function hideAboutPopup() {
+    document.getElementById('aboutPopup').style.display = 'none';
+}
 </script>
 </body>
 </html>
