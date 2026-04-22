@@ -47,17 +47,17 @@
         .holiday-item { font-size: 0.75rem; font-weight: 600; text-transform: uppercase; padding: 2px 8px; border-radius: 4px; 
         }
         
-        .header { background: var(--box-bg); color: var(--primary); padding: 12px 15px; border-bottom: 1px solid var(--border-color); display: flex; justify-content: center; align-items: center; position: relative; }
+        .header { background: var(--box-bg); color: #71b6f8; padding: 12px 15px; border-bottom: 1px solid var(--border-color); display: flex; justify-content: center; align-items: center; position: relative; }
         .header h2 { margin: 0; font-size: 1.1rem; letter-spacing: 1px; }
-        #realtimeClock { position: absolute; right: 15px; color: #ffffff; font-size: 1.4rem; font-weight: 800; font-variant-numeric: tabular-nums; text-shadow: 0 2px 4px rgba(0,0,0,0.5); }
+
 
         .controls { padding: 12px; background: var(--box-bg); border-bottom: 1px solid var(--border-color); display: flex; flex-direction: column; gap: 10px; }
         .control-row { display: flex; align-items: center; justify-content: space-between; gap: 5px; }
         .group-item { display: flex; align-items: center; gap: 4px; flex: 1; }
         
-        select, input { padding: 8px 4px; border-radius: 6px; border: 1px solid var(--border-color); background: var(--input-bg); color: var(--text-main); font-size: 1.2rem; }
+        select, input { padding: 8px 4px; border-radius: 6px; border: 1px solid var(--border-color); background: var(--input-bg); color: var(--text-main); font-size: 1rem; }
         select { flex: 1; min-width: 60px; }
-        input[type="number"] { width: 70px; font-weight: bold; color: #fff; }
+        input[type="number"] { width: 60px; font-weight: bold; color: #fff; }
         
         button { padding: 6px 6px; border-radius: 6px; border: 1px solid var(--border-color); background: var(--box-bg); color: var(--text-main); cursor: pointer; font-weight: bold; transition: 0.2s; font-size: 0.85rem; }
         button:active { opacity: 0.6; }
@@ -166,7 +166,7 @@ button:hover {
 
     <div class="header">
         <h2 id="monthTitle">THÁNG -- / ----</h2>
-        <div id="realtimeClock">--:--</div>
+       
     </div>
     
     <div class="controls">
@@ -710,10 +710,7 @@ function showTietKhiPopup() {
 }
 
 // Initializers
-function updateClock() {
-    const n = new Date();
-    document.getElementById('realtimeClock').innerText = `${String(n.getHours()).padStart(2,'0')}:${String(n.getMinutes()).padStart(2,'0')}`;
-}
+
 function closeCategoryModal() { document.getElementById('categoryModal').style.display = 'none'; }
 function closeManageModal() { document.getElementById('manageModal').style.display = 'none'; }
 function hideTietKhiPopup() { document.getElementById('tietKhiPopup').style.display = 'none'; }
