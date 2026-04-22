@@ -57,9 +57,9 @@
         
         select, input { padding: 8px 4px; border-radius: 6px; border: 1px solid var(--border-color); background: var(--input-bg); color: var(--text-main); font-size: 1.2rem; }
         select { flex: 1; min-width: 60px; }
-        input[type="number"] { width: 80px; font-weight: bold; color: #fff; }
+        input[type="number"] { width: 70px; font-weight: bold; color: #fff; }
         
-        button { padding: 8px 10px; border-radius: 6px; border: 1px solid var(--border-color); background: var(--box-bg); color: var(--text-main); cursor: pointer; font-weight: bold; transition: 0.2s; font-size: 0.85rem; }
+        button { padding: 6px 6px; border-radius: 6px; border: 1px solid var(--border-color); background: var(--box-bg); color: var(--text-main); cursor: pointer; font-weight: bold; transition: 0.2s; font-size: 0.85rem; }
         button:active { opacity: 0.6; }
         .btn-nav { color: var(--primary); border-color: var(--primary); min-width: 35px; }
         
@@ -185,15 +185,16 @@ button:hover {
         </div>
         
     <div class="action-group">
-        <button class="btn-today" onclick="goToday()">
-          TODAY
+        <button class="btn-tet" onclick="goToTet()">
+          TẾT
         </button>
         <button class="btn-event" onclick="showUpcomingEvents()">
          SỰ KIỆN
         </button>
-        <button class="btn-tet" onclick="goToTet()">
-          TẾT
+        <button class="btn-today" onclick="goToday()">
+          TODAY
         </button>
+        
         <button class="btn-leap" onclick="openLeapModal()">
             NHUẬN
         </button>
@@ -234,11 +235,11 @@ button:hover {
 <div id="aboutPopup" class="modal-overlay" onclick="hideAboutPopup()">
     <div class="modal-content" onclick="event.stopPropagation()">
         <div class="modal-header">
-            <h3>Giới Thiệu Lịch Vạn Niên Pro</h3>
+            <h3>Giới Thiệu Lịch Vạn Niên TU AN</h3>
             <button class="close-btn" onclick="hideAboutPopup()">×</button>
         </div>
         <div class="modal-body" style="line-height: 1.6; text-align: justify;">
-            <p><strong>Lịch Vạn Niên Pro</strong> là công cụ quản lý thời gian kết hợp hoàn hảo giữa hiện đại và truyền thống. Trang web được thiết kế tối ưu cho trải nghiệm người dùng với các tính năng nổi bật:</p>
+            <p><strong>Lịch Vạn Niên TU AN</strong> là công cụ quản lý thời gian kết hợp hoàn hảo giữa hiện đại và truyền thống. Trang web được thiết kế tối ưu cho trải nghiệm người dùng với các tính năng nổi bật:</p>
             <ul>
                 <li>Xem lịch âm dương, Can Chi, Tiết khí chính xác.</li>
                 <li>Quản lý sự kiện cá nhân, ngày kỷ niệm, sinh nhật.</li>
