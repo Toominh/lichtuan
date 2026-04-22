@@ -172,20 +172,7 @@ button:hover {
     </div>
     
     <div class="controls">
-        <div class="control-row">
-            <div class="group-item">
-                <button class="btn-nav" onclick="changeMonth(-1)"><svg><polyline points="15 18 9 12 15 6"></polyline></svg></button>
-                <select id="selMonth" onchange="jump()"></select>
-                <button class="btn-nav" onclick="changeMonth(1)"><svg><polyline points="9 18 15 12 9 6"></polyline></svg></button>
-            </div>
-
-            <div class="group-item" style="justify-content: flex-end;">
-                <button class="btn-nav" onclick="changeYear(-1)"><svg><line x1="5" y1="12" x2="19" y2="12"></line></svg></button>
-                <input type="number" id="inpYear" onchange="jump()">
-                <button class="btn-nav" onclick="changeYear(1)"><svg><line x1="12" y1="5" x2="12" y2="19"></line><line x1="5" y1="12" x2="19" y2="12"></line></svg></button>
-            </div>
-        </div>
-        
+    
     <div class="action-group">
         <button class="btn-tet" onclick="goToTet()">
           TẾT
@@ -204,6 +191,20 @@ button:hover {
         TIẾT KHÍ
         </button>
     </div>
+
+            <div class="control-row">
+            <div class="group-item">
+                <button class="btn-nav" onclick="changeMonth(-1)"><svg><polyline points="15 18 9 12 15 6"></polyline></svg></button>
+                <select id="selMonth" onchange="jump()"></select>
+                <button class="btn-nav" onclick="changeMonth(1)"><svg><polyline points="9 18 15 12 9 6"></polyline></svg></button>
+            </div>
+
+            <div class="group-item" style="justify-content: flex-end;">
+                <button class="btn-nav" onclick="changeYear(-1)"><svg><line x1="5" y1="12" x2="19" y2="12"></line></svg></button>
+                <input type="number" id="inpYear" onchange="jump()">
+                <button class="btn-nav" onclick="changeYear(1)"><svg><line x1="12" y1="5" x2="12" y2="19"></line><line x1="5" y1="12" x2="19" y2="12"></line></svg></button>
+            </div>
+        </div>
     </div>
 
     <div class="weekdays"><div>T2</div><div>T3</div><div>T4</div><div>T5</div><div>T6</div><div class="sat">T7</div><div class="sun">CN</div></div>
