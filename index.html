@@ -432,7 +432,7 @@ function displayDateInfo(date) {
     const monthCan = CAN[(monthCanStart + lun.lm - 1) % 10];
     const monthChi = CHI[(lun.lm + 5) % 12]; 
 
-    document.getElementById('tdCanChi').innerHTML = `Ngày <b>${dayCan} ${dayChi}</b>, Tháng <b>${monthCan} ${monthChi}</b>, Năm <b>${yearCan} ${yearChi}</b><br>Tiết: <b>${tkToday}</b>`;
+    document.getElementById('tdCanChi').innerHTML = `Ngày <b>${dayCan} ${dayChi}</b>, Tháng <b>${monthCan} ${monthChi}</b> <br> Năm <b>${yearCan} ${yearChi}</b>, Tiết: <b>${tkToday}</b>`;
     
     const holidayBox = document.getElementById('holidayBox');
     holidayBox.innerHTML = '';
