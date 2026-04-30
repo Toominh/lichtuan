@@ -177,8 +177,9 @@
 
             <div class="group-item" style="justify-content: flex-end;">
                 <button class="btn-nav" onclick="changeYear(-1)"><svg><line x1="5" y1="12" x2="19" y2="12"></line></svg></button>
-                <input type="number" id="inpYear" onchange="jump()">
-                <button class="btn-nav" onclick="changeYear(1)"><svg><line x1="12" y1="5" x2="12" y2="19"></line><line x1="5" y1="12" x2="19" y2="12"></line></svg></button>
+                <input type="number" id="inpYear" inputmode="numeric" pattern="[0-9]*" onchange="jump()">
+                <button class="btn-nav" onclick="changeYear(1)"><svg><line x1="12" y1="5" x2="12" y2="19"></line>
+                    <line x1="5" y1="12" x2="19" y2="12"></line></svg></button>
             </div>
         </div>
     </div>
@@ -547,7 +548,7 @@ function addNewEventRow(date = '', name = '') {
     const div = document.createElement('div');
     div.className = 'event-row';
     div.innerHTML = `
-        <input type="text" placeholder="14/7" value="${date}" class="ev-date">
+        <input type="text" inputmode="numeric" pattern="[0-9\/]*" placeholder="14/7" value="${date}" class="ev-date">
         <input type="text" placeholder="Tên kỷ niệm" value="${name}" class="ev-name">
         <button class="btn-del" onclick="this.parentElement.remove()">✕</button>
     `;
