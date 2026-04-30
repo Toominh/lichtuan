@@ -499,6 +499,7 @@ function openCategoryModal(catId = null) {
     const modal = document.getElementById('categoryModal');
     const title = document.getElementById('catModalTitle');
     const container = document.getElementById('eventListEditor');
+    const catNameInput = document.getElementById('catName'); // Khai báo ô nhập tên lịch
     container.innerHTML = '';
     
     let targetColor = '#ffeb3b';
@@ -507,17 +508,17 @@ function openCategoryModal(catId = null) {
         const cat = userCategories.find(c => c.id === catId);
         title.innerText = 'Chỉnh sửa lịch';
         document.getElementById('editCatId').value = cat.id;
-        document.getElementById('catName').value = cat.name;
+        catNameInput.value = cat.name;
         document.getElementById('catType').value = cat.type;
         targetColor = cat.color || '#ffeb3b';
-
+        
+        // ... (giữ nguyên phần code hiển thị danh sách sự kiện cũ ở đây)
         const sortedEntries = Object.entries(cat.events).sort((a, b) => {
             const [d1, m1] = a[0].split('/').map(n => parseInt(n) || 0);
             const [d2, m2] = b[0].split('/').map(n => parseInt(n) || 0);
             if (m1 !== m2) return m1 - m2;
             return d1 - d2;
         });
-
         sortedEntries.forEach(([date, eventData]) => {
             if (Array.isArray(eventData)) {
                 eventData.sort().forEach(name => addNewEventRow(date, name));
@@ -528,10 +529,11 @@ function openCategoryModal(catId = null) {
     } else {
         title.innerText = 'Thêm lịch mới';
         document.getElementById('editCatId').value = '';
-        document.getElementById('catName').value = '';
+        catNameInput.value = ''; // Xóa trắng tên nếu là thêm mới
         addNewEventRow();
     }
     
+    // ... (giữ nguyên phần chọn màu sắc)
     document.getElementById('catColor').value = targetColor;
     const swatches = document.querySelectorAll('.color-swatch');
     swatches.forEach(s => {
@@ -541,8 +543,17 @@ function openCategoryModal(catId = null) {
         }
     });
 
+    // 1. Hiển thị modal lên trước
     modal.style.display = 'block';
+
+    // 2. --- DÒNG CODE MỚI ĐỂ TỰ ĐỘNG FOCUS ---
+    // Sử dụng setTimeout (khoảng 50-100ms) để đảm bảo modal đã hiện ra hoàn toàn 
+    // trên màn hình điện thoại rồi mới bắt con trỏ nhảy vào.
+    setTimeout(() => {
+        catNameInput.focus();
+    }, 100);
 }
+
 function formatDate(input) {
     // 1. Khi đang gõ: Chỉ lấy các chữ số và tự động chèn dấu /
     let v = input.value.replace(/\D/g, ''); 
