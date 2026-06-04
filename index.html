@@ -445,7 +445,11 @@ function displayDateInfo(date) {
     const jd = Math.floor(getJD(d, m, y) + 0.5);
     const tkToday = getTietKhi(d, m, y);
     
-    document.getElementById('tdDow').innerText = days[date.getDay()];
+    const dow = date.getDay();
+    const dowColor = dow === 0 ? '#ef1655' : dow === 6 ? '#9ad369' : '';
+    document.getElementById('tdSolar').style.color = dowColor;
+
+    document.getElementById('tdDow').innerText = days[dow];
     document.getElementById('tdSolar').innerText = d;
     document.getElementById('tdMonthYear').innerText = `Tháng ${m}, Năm ${y}`;
     document.getElementById('tdLunar').innerText = `${lun.ld} / ${lun.lm}${lun.isLeap ? ' (Nhuận)' : ''}`;
