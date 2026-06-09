@@ -34,15 +34,18 @@
         
         .calendar-box { background: var(--box-bg); width: 100%; max-width: 450px; border-radius: 20px; box-shadow: 0 10px 40px rgba(0,0,0,0.5); overflow: hidden; }
 
-        .today-banner { background: linear-gradient(135deg, #ff5a5a, #61beff); color: white; padding: 20px 15px; text-align: center; position: relative; }
-        .today-dow { font-size: 1.5rem; font-weight: 500; text-transform: uppercase; letter-spacing: 1px; opacity: 0.8; margin-bottom: 5px; }
-        .today-solar { font-size: 5.5rem; font-weight: 900; line-height: 1; margin: 0; text-shadow: 2px 4px 10px rgba(0,0,0,0.3); }
-        .today-my { font-size: 1.4rem; font-weight: 700; margin: 5px 0 15px 0; color: #fff; }
-        .today-lunar { font-size: 2rem; background: rgba(255,255,255,0.25); padding: 8px 20px; border-radius: 30px; display: inline-block; font-weight: 800; backdrop-filter: blur(5px); border: 1px solid rgba(255,255,255,0.3);color:#fff; }
+        .today-banner { background: linear-gradient(135deg, #ff5a5a, #61beff); color: white; padding: 18px 15px 20px; text-align: center; position: relative; min-height: 160px; }
+        .today-dow { font-size: 1.5rem; font-weight: 500; text-transform: uppercase; letter-spacing: 2px; opacity: 0.9; margin-bottom: 2px; }
+        .today-solar { font-size: 5.8rem; font-weight: 900; line-height: 1; margin: 0; text-shadow: 2px 4px 12px rgba(0,0,0,0.25); letter-spacing: -2px; }
+        .today-lunar { font-size: 2rem; font-weight: 800; margin: 4px 0 2px; color: #fff; }
+        .today-tietname { font-size: 0.95rem; font-weight: 400; opacity: 0.9; margin-bottom: 8px; letter-spacing: 0.5px; }
+
+        .today-bottom-left { position: absolute; bottom: 14px; left: 14px; text-align: left; font-size: 0.88rem; font-weight: 500; color: rgba(255,255,255,0.6); line-height: 1.6; }
+        .today-bottom-right { position: absolute; bottom: 8px; right: 12px; text-align: right; }
+        .today-year { font-family: Georgia, "Times New Roman", serif; font-size: 2.6rem; font-weight: 700; line-height: 1; color: rgba(255,255,255,0.55); text-shadow: 1px 3px 8px rgba(0,0,0,0.15); }
+        .today-yearcan { font-size: 0.85rem; font-weight: 500; color: rgba(255,255,255,0.55); }
         
-        .today-canchi { font-size: 1rem; margin-top: 15px; opacity: 0.85; font-weight: 400; line-height: 1.3; }
-        
-        .holiday-container { margin-top: 10px; display: flex; flex-direction: column; gap: 4px; align-items: center; }
+        .holiday-container { margin-top: 4px; display: flex; flex-direction: column; gap: 3px; align-items: center; }
         .holiday-item { font-size: 0.75rem; font-weight: 600; text-transform: uppercase; padding: 2px 8px; border-radius: 4px; background: #5c8200; }
         
         .header { background: var(--box-bg); color: #71b6f8; padding: 12px 15px; border-bottom: 1px solid var(--border-color); display: none; justify-content: center; align-items: center; position: relative; }
@@ -147,11 +150,18 @@
 <div class="calendar-box">
     <div class="today-banner" id="topBanner">
         <div class="today-dow" id="tdDow">Thứ Sáu</div>
-        <div class="today-solar" id="tdSolar">24</div>
-        <div class="today-my" id="tdMonthYear">Tháng 4, Năm 2026</div>
-        <div class="today-lunar" id="tdLunar">8/3 Âm lịch</div>
-        <div class="today-canchi" id="tdCanChi">Ngày <b>Mậu Thìn</b>, Tháng <b>Nhâm Thìn</b><br> Năm <b>Bính Ngọ</b>, Tiết: <b>Cốc Vũ</b></div>
+        <div class="today-solar" id="tdSolar">24-4</div>
+        <div class="today-lunar" id="tdLunar">8-3</div>
+        <div class="today-tietname" id="tdTietName">Tiết Cốc Vũ</div>
         <div class="holiday-container" id="holidayBox"></div>
+        <div class="today-bottom-left">
+            <div id="tdDayCan">Ngày Mậu Thìn</div>
+            <div id="tdMonthCan">Tháng Nhâm Thìn</div>
+        </div>
+        <div class="today-bottom-right">
+            <div class="today-year" id="tdYear">2026</div>
+            <div class="today-yearcan" id="tdYearCan">Bính Ngọ</div>
+        </div>
     </div>
 
     <div class="header">
@@ -450,9 +460,9 @@ function displayDateInfo(date) {
     document.getElementById('tdSolar').style.color = dowColor;
 
     document.getElementById('tdDow').innerText = days[dow];
-    document.getElementById('tdSolar').innerText = d;
-    document.getElementById('tdMonthYear').innerText = `Tháng ${m}, Năm ${y}`;
-    document.getElementById('tdLunar').innerText = `${lun.ld} / ${lun.lm}${lun.isLeap ? ' (Nhuận)' : ''}`;
+    document.getElementById('tdSolar').innerText = `${d}-${m}`;
+    document.getElementById('tdLunar').innerText = `${lun.ld}-${lun.lm}${lun.isLeap ? ' (Nhuận)' : ''}`;
+    document.getElementById('tdTietName').innerText = `Tiết ${tkToday}`;
     
     const dayCan = CAN[(jd + 3) % 10], dayChi = CHI[(jd + 5) % 12];
     const yearCan = CAN[lun.ly % 10], yearChi = CHI[lun.ly % 12];
@@ -460,7 +470,10 @@ function displayDateInfo(date) {
     const monthCan = CAN[(monthCanStart + lun.lm - 1) % 10];
     const monthChi = CHI[(lun.lm + 5) % 12]; 
 
-    document.getElementById('tdCanChi').innerHTML = `Ngày <b>${dayCan} ${dayChi}</b>, Tháng <b>${monthCan} ${monthChi}</b><br> Năm <b>${yearCan} ${yearChi}</b>, Tiết: <b>${tkToday}</b>`;
+    document.getElementById('tdDayCan').innerText = `Ngày ${dayCan} ${dayChi}`;
+    document.getElementById('tdMonthCan').innerText = `Tháng ${monthCan} ${monthChi}`;
+    document.getElementById('tdYear').innerText = y;
+    document.getElementById('tdYearCan').innerText = `${yearCan} ${yearChi}`;
     
     const holidayBox = document.getElementById('holidayBox');
     holidayBox.innerHTML = '';
