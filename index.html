@@ -1,4 +1,3 @@
-<!DOCTYPE html>
 <html lang="vi"><head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
@@ -34,15 +33,28 @@
         
         .calendar-box { background: var(--box-bg); width: 100%; max-width: 450px; border-radius: 20px; box-shadow: 0 10px 40px rgba(0,0,0,0.5); overflow: hidden; }
 
-        .today-banner { background: linear-gradient(135deg, #ff5a5a, #61beff); color: white; padding: 18px 15px 20px; text-align: center; position: relative; min-height: 160px; }
+        .today-banner { background: linear-gradient(135deg, #ff5a5a, #3cafff); color: white; padding: 18px 15px 20px; text-align: center; position: relative; min-height: 160px; }
         .today-dow { font-size: 1.5rem; font-weight: 500; text-transform: uppercase; letter-spacing: 2px; opacity: 0.9; margin-bottom: 2px; }
-        .today-solar { font-size: 5.8rem; font-weight: 900; line-height: 1; margin: 0; text-shadow: 2px 4px 12px rgba(0,0,0,0.25); letter-spacing: -2px; }
-        .today-lunar { font-size: 2rem; font-weight: 800; margin: 4px 0 2px; color: #fff; }
-        .today-tietname { font-size: 0.95rem; font-weight: 400; opacity: 0.9; margin-bottom: 8px; letter-spacing: 0.5px; }
+        .today-solar-month { font-size: 1.2rem; font-weight: 600; line-height: 1; color: #fff; margin-bottom: 0; text-transform: uppercase; margin: 5px 0px;}
+        .today-solar { font-size: 8rem; font-weight: 900; line-height: 1; text-shadow: 2px 4px 12px rgba(0,0,0,0.25); margin-top: 20px;}
+       .today-lunar {
+    font-size: 1.8rem;
+    background: rgba(255,255,255,0.25);
+    padding: 0px 20px;
+    border-radius: 30px;
+    display: inline-block;
+    font-weight: 800;
+    backdrop-filter: blur(5px);
+    border: 1px solid rgba(255,255,255,0.3);
+    color: #fff;
+    margin-top: 5px;
+    margin-bottom: 80px;
+}
+        .today-tietname { font-size: 0.95rem; font-weight: 400; opacity: 1; margin-bottom: 0px; letter-spacing: 0.5px; }
 
-        .today-bottom-left { position: absolute; bottom: 14px; left: 14px; text-align: left; font-size: 0.88rem; font-weight: 500; color: rgba(255,255,255,0.6); line-height: 1.6; }
+        .today-bottom-left { position: absolute; bottom: 8px; left: 14px; text-align: left; font-size: 0.88rem; font-weight: 500; color: rgba(255,255,255,0.6); line-height: 1.6; }
         .today-bottom-right { position: absolute; bottom: 8px; right: 12px; text-align: right; }
-        .today-year { font-family: Georgia, "Times New Roman", serif; font-size: 2.6rem; font-weight: 700; line-height: 1; color: rgba(255,255,255,0.55); text-shadow: 1px 3px 8px rgba(0,0,0,0.15); }
+        .today-year { font-family: Georgia, "Times New Roman", serif; font-size: 2rem; font-weight: 700; line-height: 1; color: rgba(255,255,255,0.55); text-shadow: 1px 3px 8px rgba(0,0,0,0.15); }
         .today-yearcan { font-size: 0.85rem; font-weight: 500; color: rgba(255,255,255,0.55); }
         
         .holiday-container { margin-top: 4px; display: flex; flex-direction: column; gap: 3px; align-items: center; }
@@ -150,13 +162,15 @@
 <div class="calendar-box">
     <div class="today-banner" id="topBanner">
         <div class="today-dow" id="tdDow">Thứ Sáu</div>
-        <div class="today-solar" id="tdSolar">24-4</div>
-        <div class="today-lunar" id="tdLunar">8-3</div>
-        <div class="today-tietname" id="tdTietName">Tiết Cốc Vũ</div>
+        
+        <div class="today-solar" id="tdSolar" style="">5</div><div class="today-solar-month" id="tdSolarMonth">tháng 6</div>
+        <div class="today-lunar" id="tdLunar"><span style="color:rgba(255,255,255,0.88)">20-4</span></div>
+        
         <div class="holiday-container" id="holidayBox"></div>
         <div class="today-bottom-left">
-            <div id="tdDayCan">Ngày Mậu Thìn</div>
-            <div id="tdMonthCan">Tháng Nhâm Thìn</div>
+            <div id="tdDayCan">Ngày Canh Tuất</div>
+            <div id="tdMonthCan">Tháng Quý Tỵ</div>
+<div class="today-tietname" id="tdTietName">Tiết Tiểu Mãn</div>
         </div>
         <div class="today-bottom-right">
             <div class="today-year" id="tdYear">2026</div>
@@ -165,7 +179,7 @@
     </div>
 
     <div class="header">
-        <h2 id="monthTitle">THÁNG 4 / 2026</h2>
+        <h2 id="monthTitle">THÁNG 6 / 2026</h2>
     </div>
     
     <div class="controls">
@@ -181,7 +195,7 @@
                 <button class="btn-nav" onclick="changeMonth(-1)"><svg><polyline points="15 18 9 12 15 6"></polyline></svg></button>
                 <select id="selMonth" onchange="jump()">
                     <option value="0">Tháng 1</option><option value="1">Tháng 2</option><option value="2">Tháng 3</option><option value="3">Tháng 4</option><option value="4">Tháng 5</option><option value="5">Tháng 6</option><option value="6">Tháng 7</option><option value="7">Tháng 8</option><option value="8">Tháng 9</option><option value="9">Tháng 10</option><option value="10">Tháng 11</option><option value="11">Tháng 12</option>
-                </select>
+                <option value="0">Tháng 1</option><option value="1">Tháng 2</option><option value="2">Tháng 3</option><option value="3">Tháng 4</option><option value="4">Tháng 5</option><option value="5">Tháng 6</option><option value="6">Tháng 7</option><option value="7">Tháng 8</option><option value="8">Tháng 9</option><option value="9">Tháng 10</option><option value="10">Tháng 11</option><option value="11">Tháng 12</option><option value="0">Tháng 1</option><option value="1">Tháng 2</option><option value="2">Tháng 3</option><option value="3">Tháng 4</option><option value="4">Tháng 5</option><option value="5">Tháng 6</option><option value="6">Tháng 7</option><option value="7">Tháng 8</option><option value="8">Tháng 9</option><option value="9">Tháng 10</option><option value="10">Tháng 11</option><option value="11">Tháng 12</option></select>
                 <button class="btn-nav" onclick="changeMonth(1)"><svg><polyline points="9 18 15 12 9 6"></polyline></svg></button>
             </div>
 
@@ -195,8 +209,127 @@
     </div>
 
     <div class="weekdays"><div>T2</div><div>T3</div><div>T4</div><div>T5</div><div>T6</div><div class="sat">T7</div><div class="sun">CN</div></div>
-    <div id="grid" class="days-grid">
-        </div>
+    <div id="grid" class="days-grid"><div class="cell   ">
+            <div class="solar ">1</div>
+            <div class="lunar ">16</div>
+            <div class="indicator-container"></div>
+        </div><div class="cell   ">
+            <div class="solar ">2</div>
+            <div class="lunar ">17</div>
+            <div class="indicator-container"></div>
+        </div><div class="cell   ">
+            <div class="solar ">3</div>
+            <div class="lunar ">18</div>
+            <div class="indicator-container"></div>
+        </div><div class="cell   ">
+            <div class="solar ">4</div>
+            <div class="lunar ">19</div>
+            <div class="indicator-container"></div>
+        </div><div class="cell   selected-cell">
+            <div class="solar ">5</div>
+            <div class="lunar ">20</div>
+            <div class="indicator-container"></div>
+        </div><div class="cell   ">
+            <div class="solar sat">6</div>
+            <div class="lunar ">21</div>
+            <div class="indicator-container"><div class="dot dot-tietkhi"></div></div>
+        </div><div class="cell   ">
+            <div class="solar sun">7</div>
+            <div class="lunar ">22</div>
+            <div class="indicator-container"></div>
+        </div><div class="cell   ">
+            <div class="solar ">8</div>
+            <div class="lunar ">23</div>
+            <div class="indicator-container"></div>
+        </div><div class="cell today  ">
+            <div class="solar ">9</div>
+            <div class="lunar ">24</div>
+            <div class="indicator-container"></div>
+        </div><div class="cell   ">
+            <div class="solar ">10</div>
+            <div class="lunar ">25</div>
+            <div class="indicator-container"></div>
+        </div><div class="cell   ">
+            <div class="solar ">11</div>
+            <div class="lunar ">26</div>
+            <div class="indicator-container"></div>
+        </div><div class="cell   ">
+            <div class="solar ">12</div>
+            <div class="lunar ">27</div>
+            <div class="indicator-container"></div>
+        </div><div class="cell   ">
+            <div class="solar sat">13</div>
+            <div class="lunar ">28</div>
+            <div class="indicator-container"></div>
+        </div><div class="cell   ">
+            <div class="solar sun">14</div>
+            <div class="lunar ">29</div>
+            <div class="indicator-container"></div>
+        </div><div class="cell  special-bg ">
+            <div class="solar ">15</div>
+            <div class="lunar special-text">1 / 5</div>
+            <div class="indicator-container"></div>
+        </div><div class="cell   ">
+            <div class="solar ">16</div>
+            <div class="lunar ">2</div>
+            <div class="indicator-container"></div>
+        </div><div class="cell   ">
+            <div class="solar ">17</div>
+            <div class="lunar ">3</div>
+            <div class="indicator-container"></div>
+        </div><div class="cell   ">
+            <div class="solar ">18</div>
+            <div class="lunar ">4</div>
+            <div class="indicator-container"></div>
+        </div><div class="cell   ">
+            <div class="solar ">19</div>
+            <div class="lunar ">5</div>
+            <div class="indicator-container"></div>
+        </div><div class="cell   ">
+            <div class="solar sat">20</div>
+            <div class="lunar ">6</div>
+            <div class="indicator-container"></div>
+        </div><div class="cell   ">
+            <div class="solar sun">21</div>
+            <div class="lunar ">7</div>
+            <div class="indicator-container"></div>
+        </div><div class="cell   ">
+            <div class="solar ">22</div>
+            <div class="lunar ">8</div>
+            <div class="indicator-container"><div class="dot dot-tietkhi"></div></div>
+        </div><div class="cell   ">
+            <div class="solar ">23</div>
+            <div class="lunar ">9</div>
+            <div class="indicator-container"></div>
+        </div><div class="cell   ">
+            <div class="solar ">24</div>
+            <div class="lunar ">10</div>
+            <div class="indicator-container"></div>
+        </div><div class="cell   ">
+            <div class="solar ">25</div>
+            <div class="lunar ">11</div>
+            <div class="indicator-container"></div>
+        </div><div class="cell   ">
+            <div class="solar ">26</div>
+            <div class="lunar ">12</div>
+            <div class="indicator-container"></div>
+        </div><div class="cell   ">
+            <div class="solar sat">27</div>
+            <div class="lunar ">13</div>
+            <div class="indicator-container"></div>
+        </div><div class="cell   ">
+            <div class="solar sun">28</div>
+            <div class="lunar ">14</div>
+            <div class="indicator-container"></div>
+        </div><div class="cell  special-bg ">
+            <div class="solar ">29</div>
+            <div class="lunar special-text">15</div>
+            <div class="indicator-container"></div>
+        </div><div class="cell   ">
+            <div class="solar ">30</div>
+            <div class="lunar ">16</div>
+            <div class="indicator-container"></div>
+        </div></div>
 </div>
 
 <div class="admin-controls">
@@ -457,11 +590,14 @@ function displayDateInfo(date) {
     
     const dow = date.getDay();
     const dowColor = dow === 0 ? '#ef1655' : dow === 6 ? '#9ad369' : '';
-    document.getElementById('tdSolar').style.color = dowColor;
+    document.getElementById('tdDow').style.color = dowColor;
+    document.getElementById('tdSolar').style.color = (d === 1) ? '#ff3838e0' : '#ffffff';
 
     document.getElementById('tdDow').innerText = days[dow];
-    document.getElementById('tdSolar').innerText = `${d}-${m}`;
-    document.getElementById('tdLunar').innerText = `${lun.ld}-${lun.lm}${lun.isLeap ? ' (Nhuận)' : ''}`;
+    document.getElementById('tdSolar').innerText = d;
+    document.getElementById('tdSolarMonth').innerText = `tháng ${m}`;
+    const lunarColor = (lun.ld === 1 || lun.ld === 15) ? '#ff3838e0' : 'rgba(255,255,255,0.88)';
+    document.getElementById('tdLunar').innerHTML = `<span style="color:${lunarColor}">${lun.ld}-${lun.lm}${lun.isLeap ? ' (Nhuận)' : ''}</span>`;
     document.getElementById('tdTietName').innerText = `Tiết ${tkToday}`;
     
     const dayCan = CAN[(jd + 3) % 10], dayChi = CHI[(jd + 5) % 12];
@@ -473,7 +609,9 @@ function displayDateInfo(date) {
     document.getElementById('tdDayCan').innerText = `Ngày ${dayCan} ${dayChi}`;
     document.getElementById('tdMonthCan').innerText = `Tháng ${monthCan} ${monthChi}`;
     document.getElementById('tdYear').innerText = y;
+    document.getElementById('tdYear').style.color = (d === 1 && m === 1) ? '#ff3838e0' : '';
     document.getElementById('tdYearCan').innerText = `${yearCan} ${yearChi}`;
+    document.getElementById('tdYearCan').style.color = (lun.ld === 1 && lun.lm === 1) ? '#ff3838e0' : '';
     
     const holidayBox = document.getElementById('holidayBox');
     holidayBox.innerHTML = '';
@@ -994,5 +1132,6 @@ function exportFullHTML() {
     }, 0);
 }
 </script>
+
 
 </body></html>
