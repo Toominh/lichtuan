@@ -34,7 +34,20 @@
         .calendar-box { background: var(--box-bg); width: 100%; max-width: 450px; border-radius: 20px; box-shadow: 0 10px 40px rgba(0,0,0,0.5); overflow: hidden; }
 
         .today-banner { background: linear-gradient(135deg, #ff5a5a, #3cafff); color: white; padding: 18px 15px 20px; text-align: center; position: relative; min-height: 160px; }
-        .today-dow { font-size: 1.5rem; font-weight: 500; text-transform: uppercase; letter-spacing: 2px; opacity: 0.9; margin-bottom: 2px; }
+    .today-dow {
+    font-size: 1.5rem;
+    font-weight: 500;
+    text-transform: uppercase;
+    letter-spacing: 2px;
+    opacity: 1;
+    margin-bottom: 2px;
+    background: #ffffff3d;
+    display: inline-block;
+    padding: 5px 20px;
+    border: 1px solid rgb(255 255 255 / 44%);
+    border-radius: 30px;
+    backdrop-filter: blur(5px);
+}
         .today-solar-month { font-size: 1.2rem; font-weight: 600; line-height: 1; color: #fff; margin-bottom: 0; text-transform: uppercase; margin: 5px 0px;}
         .today-solar { font-size: 8rem; font-weight: 900; line-height: 1; text-shadow: 2px 4px 12px rgba(0,0,0,0.25); margin-top: 0px;}
        .today-lunar {
@@ -48,7 +61,7 @@
     border: 1px solid rgba(255,255,255,0.3);
     color: #fff;
     margin-top: 5px;
-    margin-bottom: 60px;
+    margin-bottom: 5px;
 }
         .today-tietname { font-size: 0.95rem; font-weight: 400; opacity: 1; margin-bottom: 0px; letter-spacing: 0.5px; }
 
@@ -57,8 +70,8 @@
         .today-year { font-family: Georgia, "Times New Roman", serif; font-size: 2rem; font-weight: 700; line-height: 1; color: rgba(255,255,255,0.55); text-shadow: 1px 3px 8px rgba(0,0,0,0.15); }
         .today-yearcan { font-size: 0.85rem; font-weight: 500; color: rgba(255,255,255,0.55); }
         
-        .holiday-container { margin-top: 4px; display: flex; flex-direction: column; gap: 3px; align-items: center; }
-        .holiday-item { font-size: 0.75rem; font-weight: 600; text-transform: uppercase; padding: 2px 8px; border-radius: 4px; background: #5c8200; }
+        .holiday-container { margin-top: 4px; display: flex; flex-direction: column; gap: 3px; align-items: center; margin-bottom: 60px;}
+        .holiday-item { font-size: 0.75rem; font-weight: 600; text-transform: uppercase; padding: 2px 8px; border-radius: 4px; }
         
         .header { background: var(--box-bg); color: #71b6f8; padding: 12px 15px; border-bottom: 1px solid var(--border-color); display: none; justify-content: center; align-items: center; position: relative; }
         .header h2 { margin: 0; font-size: 1.1rem; letter-spacing: 1px; color: yellow; }
@@ -101,7 +114,7 @@
         .solar { font-size: 1.1rem; font-weight: 600; z-index: 2; }
         .lunar { font-size: 0.9rem; color: var(--text-muted); margin-top: 2px; z-index: 2; }
         .sun { color: #ef1655; }
-        .sat { color: #9ad369; }
+        .sat { color: #447c15; }
         .today { background: #26361c; outline: 1px solid #5b784e; z-index: 5; border-radius: 4px; }
         
         .special-text { color: #ef9a16; font-weight: bold; }
@@ -589,7 +602,7 @@ function displayDateInfo(date) {
     const tkToday = getTietKhi(d, m, y);
     
     const dow = date.getDay();
-    const dowColor = dow === 0 ? '#ef1655' : dow === 6 ? '#9ad369' : '';
+    const dowColor = dow === 0 ? '#ef1655' : dow === 6 ? '#447c15' : '';
     document.getElementById('tdDow').style.color = dowColor;
     document.getElementById('tdSolar').style.color = (d === 1) ? '#ff3838e0' : '#ffffff';
 
